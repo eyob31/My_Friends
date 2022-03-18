@@ -18,6 +18,9 @@ dependencies:
   google_fonts: ^2.3.1
   font_awesome_flutter: ^9.2.0
   email_validator: ^2.0.1
+  firebase_auth: ^3.3.10
+  google_sign_in: ^5.2.4
+  intl: ^0.17.0
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
