@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_friends_frontend/services/auth.dart';
 
 class DrawerPage extends StatefulWidget {
   const DrawerPage({Key? key}) : super(key: key);
@@ -9,6 +10,7 @@ class DrawerPage extends StatefulWidget {
 }
 
 class _DrawerPageState extends State<DrawerPage> {
+  AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -50,7 +52,9 @@ class _DrawerPageState extends State<DrawerPage> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () async {
+              await _auth.signOut();
+            },
             child: ListTile(
               leading: Icon(Icons.logout),
               title: Text('Log out'),

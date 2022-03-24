@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import '../provider/friend.dart';
-import '../widgets/drawer_page.dart';
+import '../../provider/friend.dart';
+import '../../widgets/drawer_page.dart';
 
 class AddFriends extends StatefulWidget {
   const AddFriends({Key? key}) : super(key: key);
@@ -13,15 +13,16 @@ class AddFriends extends StatefulWidget {
 
 class _AddFriendsState extends State<AddFriends> {
   final _formkey = GlobalKey<FormState>();
-  late DateTime date;
+  DateTime? date;
+  bool favorite = false;
   var friendData = Friend(
       name: '', email: '', birthDay: '', description: '', phoneNumber: '');
 
-  String getDate() {
+  Object getDate() {
     if (date == null) {
-      return 'Add Birth Day';
+      return DateTime.now();
     } else {
-      return DateFormat('dd-MM-yyyy').format(date);
+      return DateFormat('dd-MM-yyyy').format(date!);
     }
   }
 
@@ -35,13 +36,14 @@ class _AddFriendsState extends State<AddFriends> {
           style: GoogleFonts.arsenal(fontWeight: FontWeight.w400, fontSize: 20),
         ),
       ),
-      drawer: DrawerPage(),
+      drawer: const DrawerPage(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(20),
             child: Form(
               key: _formkey,
+              // A Column of TextField forms for Adding Friends data.
               child: Column(
                 children: [
                   _buildName(),
@@ -64,6 +66,7 @@ class _AddFriendsState extends State<AddFriends> {
                   SizedBox(
                     height: 15,
                   ),
+                  // Is Favorites
                   Row(
                     children: [
                       Text(
@@ -73,9 +76,14 @@ class _AddFriendsState extends State<AddFriends> {
                       ),
                       Expanded(child: Container()),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              favorite = !favorite;
+                            });
+                          },
                           icon: Icon(
                             Icons.favorite_border_rounded,
+                            color: favorite == true ? Colors.red : Colors.grey,
                           ))
                     ],
                   ),
@@ -97,6 +105,7 @@ class _AddFriendsState extends State<AddFriends> {
                         print(friendData.description);
                         print(friendData.phoneNumber);
                         print(date);
+                        print(favorite);
                       },
                       child: Text(
                         'Add Friend',
@@ -195,7 +204,7 @@ class _AddFriendsState extends State<AddFriends> {
     );
   }
 
-//  Phone Number Description
+//  Phone Number TextField
   Widget _buildPhoneNumber() {
     return TextFormField(
       keyboardType: TextInputType.phone,
@@ -243,7 +252,7 @@ class _AddFriendsState extends State<AddFriends> {
     final newDate = await showDatePicker(
         context: context,
         initialDate: date ?? intialDate,
-        firstDate: DateTime(DateTime.now().year - 60),
+        firstDate: DateTime(DateTime.now().year - 100),
         lastDate: DateTime(DateTime.now().year + 100));
     if (newDate == null) {
       print('No date picked');

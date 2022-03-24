@@ -4,22 +4,27 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_friends_frontend/provider/google_signin.dart';
-import 'package:my_friends_frontend/screens/sign_up.dart';
+import 'package:my_friends_frontend/screens/authenticate/sign_up.dart';
+import 'package:my_friends_frontend/services/auth.dart';
 import 'package:provider/provider.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
-
+  // const SignIn({Key? key, required this.toggleView}) : super(key: key);
+  final Function toggleView;
+  SignIn({required this.toggleView});
   @override
   _SignInState createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
   TextEditingController _emailController = TextEditingController();
+  AuthService _auth = AuthService();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
   bool _hidePassword = true;
+  String email = '';
+  String password = '';
   @override
   void initState() {
     super.initState();
@@ -82,6 +87,11 @@ class _SignInState extends State<SignIn> {
                         controller: _emailController,
                         textInputAction: TextInputAction.next,
                         focusNode: _emailFocusNode,
+                        onChanged: (value) {
+                          setState(() {
+                            email = value;
+                          });
+                        },
                         onFieldSubmitted: (_) {
                           Focus.of(context).requestFocus(_passwordFocusNode);
                         },
@@ -144,6 +154,11 @@ class _SignInState extends State<SignIn> {
                       child: TextFormField(
                         focusNode: _passwordFocusNode,
                         obscureText: _hidePassword,
+                        onChanged: (value) {
+                          setState(() {
+                            password = value;
+                          });
+                        },
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Enter your Password Please';
@@ -195,8 +210,17 @@ class _SignInState extends State<SignIn> {
               ),
               //  Sign In Button
               TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     _formKey.currentState!.validate();
+                    // dynamic result = await _auth.signInAnon();
+                    // if (result == null) {
+                    //   print("We couldn't sign in");
+                    // } else {
+                    //   print('Successful Sign in');
+                    //   print(result.uid);
+                    // }
+                    print(email);
+                    print(password);
                   },
                   style: ButtonStyle(
                     backgroundColor:
@@ -212,21 +236,22 @@ class _SignInState extends State<SignIn> {
                         fontSize: 22),
                   )),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               // SIgn in with google account
               Column(
                 children: [
                   Text(
-                    'Or Sign in with: ',
+                    '_________ Or _________',
                     style: GoogleFonts.arsenal(
-                        fontSize: 15, fontStyle: FontStyle.italic),
+                        fontSize: 20, fontStyle: FontStyle.italic),
                   )
                 ],
               ),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
+              // Sign in with Google Button
               ElevatedButton.icon(
                 onPressed: () {
                   final provider =
@@ -234,12 +259,13 @@ class _SignInState extends State<SignIn> {
                   provider.googleLogin();
                 },
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.green),
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.transparent),
                     minimumSize:
                         MaterialStateProperty.all(const Size(100, 40))),
                 icon: const FaIcon(
                   FontAwesomeIcons.google,
-                  color: Colors.white,
+                  color: Colors.redAccent,
                 ),
                 label: Text(
                   'Sign in with Google',
@@ -263,7 +289,10 @@ class _SignInState extends State<SignIn> {
                             fontSize: 17,
                             color: Colors.green,
                             fontWeight: FontWeight.bold),
-                        recognizer: TapGestureRecognizer()..onTap = goToSignUp)
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            widget.toggleView();
+                          })
                   ]),
                 ),
               ),
@@ -274,7 +303,7 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  void goToSignUp() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
-  }
+  // void goToSignUp() {
+  //   Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+  // }
 }

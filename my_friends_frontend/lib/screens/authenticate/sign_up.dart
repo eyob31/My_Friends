@@ -4,8 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
-
+  // const SignUp({Key? key, required this.toggleView}) : super(key: key);
+  final Function toggleView;
+  SignUp({required this.toggleView});
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -136,14 +137,14 @@ class _SignUpState extends State<SignUp> {
               Column(
                 children: [
                   Text(
-                    'Or Sign up with: ',
+                    '_________ Or _________',
                     style: GoogleFonts.arsenal(
-                        fontSize: 15, fontStyle: FontStyle.italic),
+                        fontSize: 20, fontStyle: FontStyle.italic),
                   )
                 ],
               ),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
               ElevatedButton.icon(
                 onPressed: () {},
@@ -157,6 +158,30 @@ class _SignUpState extends State<SignUp> {
                 label: Text(
                   'Sign up with Google',
                   style: GoogleFonts.arsenal(fontSize: 15, color: Colors.white),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              //  If You have an account Sign in
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: "Do you have an account?   ",
+                        style: GoogleFonts.arsenal(color: Colors.black)),
+                    TextSpan(
+                        text: "Sign in",
+                        style: GoogleFonts.arsenal(
+                            fontSize: 17,
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            widget.toggleView();
+                          })
+                  ]),
                 ),
               ),
             ],

@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_friends_frontend/screens/sign_in.dart';
-import 'package:my_friends_frontend/screens/sign_up.dart';
+import 'package:my_friends_frontend/screens/authenticate/sign_in.dart';
+import 'package:my_friends_frontend/screens/authenticate/sign_up.dart';
+import 'package:my_friends_frontend/screens/home/add_friends.dart';
 
 import '../screens/home_page_screen.dart';
 
@@ -24,8 +25,7 @@ class HomePage extends StatelessWidget with ChangeNotifier {
             } else if (snapshot.hasError) {
               return Center(child: Text("Something Went Wrong"));
             } else {
-              return SignIn();
+              return AddFriends();
             }
           }));
-
 }
